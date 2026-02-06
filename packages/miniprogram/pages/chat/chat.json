@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "对话",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "loading": "/components/loading/loading"
+  }
+}

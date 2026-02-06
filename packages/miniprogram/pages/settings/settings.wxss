@@ -1,0 +1,91 @@
+/* pages/settings/settings.wxss */
+
+.settings-page {
+  min-height: 100vh;
+  background-color: var(--background-base);
+  padding: var(--space-md);
+}
+
+/* 区块 */
+.section {
+  margin-bottom: var(--space-xl);
+}
+
+.section-header {
+  margin-bottom: var(--space-md);
+}
+
+.section-title {
+  font-size: var(--text-sm);
+  color: var(--text-weak);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* 设置项 */
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg) 0;
+  border-bottom: 1px solid var(--border-base);
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.item-label {
+  font-size: var(--text-base);
+  color: var(--text-base);
+}
+
+.item-value {
+  font-size: var(--text-sm);
+  color: var(--text-weak);
+  text-align: right;
+}
+
+.item-arrow {
+  font-size: 24px;
+  color: var(--text-weaker);
+}
+
+/* 开关 */
+.toggle-switch {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  background-color: var(--surface-weak);
+  border-radius: 14px;
+  transition: background-color var(--transition-fast);
+}
+
+.toggle-switch.active {
+  background-color: var(--brand-primary);
+}
+
+.toggle-dot {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform var(--transition-fast);
+}
+
+.toggle-switch.active .toggle-dot {
+  transform: translateX(20px);
+}
+
+/* 危险按钮 */
+.btn-danger {
+  background-color: var(--error);
+  color: white;
+}
+
+.btn-danger:active {
+  background-color: #dc2626;
+}

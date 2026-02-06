@@ -1,0 +1,30 @@
+{
+  "pages": ["pages/login/login", "pages/index/index", "pages/chat/chat", "pages/settings/settings"],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#131010",
+    "navigationBarTitleText": "OpenCode",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#131010",
+    "navigationStyle": "custom"
+  },
+  "tabBar": {
+    "color": "#7f7979",
+    "selectedColor": "#fdffca",
+    "backgroundColor": "#1b1818",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "会话"
+      },
+      {
+        "pagePath": "pages/settings/settings",
+        "text": "设置"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

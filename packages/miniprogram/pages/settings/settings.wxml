@@ -1,0 +1,61 @@
+<!-- pages/settings/settings.wxml -->
+<view class="settings-page">
+  <!-- 用户信息 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">账号信息</text>
+    </view>
+    <view class="card">
+      <view class="setting-item">
+        <text class="item-label">用户名</text>
+        <text class="item-value">{{userInfo.username || '未登录'}}</text>
+      </view>
+      <view class="setting-item">
+        <text class="item-label">服务器地址</text>
+        <text class="item-value">{{serverUrl}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主题设置 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">主题</text>
+    </view>
+    <view class="card">
+      <view class="setting-item" bindtap="toggleTheme">
+        <text class="item-label">深色模式</text>
+        <view class="toggle-switch {{theme === 'dark' ? 'active' : ''}}">
+          <view class="toggle-dot"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 其他设置 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">其他</text>
+    </view>
+    <view class="card">
+      <view class="setting-item" bindtap="handleClearCache">
+        <text class="item-label">清除缓存</text>
+        <text class="item-arrow">›</text>
+      </view>
+      <view class="setting-item" bindtap="handleAbout">
+        <text class="item-label">关于 OpenCode</text>
+        <text class="item-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="section">
+    <button 
+      class="btn btn-danger btn-block" 
+      bindtap="handleLogout"
+    >
+      退出登录
+    </button>
+  </view>
+</view>

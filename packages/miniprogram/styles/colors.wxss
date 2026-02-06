@@ -1,0 +1,16 @@
+/* styles/colors.wxss - 微信风格 */
+
+/* 微信风格配色 */
+page {
+  --wechat-green: #07c160;
+  --wechat-green-light: #95ec69;
+  --wechat-green-dark: #06ad56;
+  
+  --bg-page: #ededed;
+  --bg-white: #ffffff;
+  --bg-gray: #f5f5f5;
+  
+  --text-primary: #000000;
+  --text-secondary: #999999;
+  --text-tertiary: #b2b2b2;
+}

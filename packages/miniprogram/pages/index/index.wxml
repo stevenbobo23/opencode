@@ -1,0 +1,94 @@
+<!-- pages/index/index.wxml - 微信风格会话列表 -->
+<view class="index-page">
+  <!-- 导航栏 -->
+  <view class="nav-bar">
+    <text class="nav-title">微信</text>
+    <view class="nav-actions">
+      <view class="nav-btn" bindtap="handleSearch">
+        <text class="nav-icon">🔍</text>
+      </view>
+      <view class="nav-btn" bindtap="handleNewSession">
+        <text class="nav-icon">➕</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索栏 -->
+  <view wx:if="{{showSearch}}" class="search-bar">
+    <view class="search-input-wrapper">
+      <text class="search-icon">🔍</text>
+      <input 
+        class="search-input" 
+        placeholder="搜索" 
+        value="{{searchQuery}}"
+        bindinput="onSearchInput"
+        focus="{{showSearch}}"
+      />
+    </view>
+    <text class="search-cancel" bindtap="closeSearch">取消</text>
+  </view>
+
+  <!-- 会话列表 -->
+  <scroll-view 
+    class="session-list" 
+    scroll-y
+    enhanced
+    show-scrollbar="{{false}}"
+  >
+    <!-- 加载中 -->
+    <view wx:if="{{loading}}" class="loading-state">
+      <text class="loading-text">加载中...</text>
+    </view>
+
+    <!-- 会话项 -->
+    <view 
+      class="session-item" 
+      wx:for="{{filteredSessions}}" 
+      wx:key="id"
+      bindtap="handleSessionTap"
+      data-id="{{item.id}}"
+    >
+      <!-- 头像 -->
+      <view class="session-avatar">
+        <text class="avatar-text">🤖</text>
+      </view>
+
+      <!-- 内容区 -->
+      <view class="session-content">
+        <view class="session-header">
+          <text class="session-title">{{item.title || '新会话'}}</text>
+          <text class="session-time">{{item.time}}</text>
+        </view>
+        <text class="session-preview">{{item.preview || '点击开始对话'}}</text>
+      </view>
+
+      <!-- 删除按钮 -->
+      <view 
+        class="delete-btn" 
+        catchtap="handleDelete"
+        data-id="{{item.id}}"
+      >
+        <text class="delete-icon">删除</text>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{!loading && filteredSessions.length === 0}}" class="empty-state">
+      <text class="empty-icon">💬</text>
+      <text class="empty-text">暂无会话</text>
+      <text class="empty-subtext" bindtap="handleNewSession">点击右上角 + 创建新会话</text>
+    </view>
+  </scroll-view>
+
+  <!-- Tab Bar -->
+  <view class="tab-bar">
+    <view class="tab-item active">
+      <text class="tab-icon">💬</text>
+      <text class="tab-text">微信</text>
+    </view>
+    <view class="tab-item">
+      <text class="tab-icon">👤</text>
+      <text class="tab-text">我</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,395 @@
+
+/* pages/chat/chat.wxss - 微信风格 */
+
+.chat-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #ededed;
+}
+
+/* 导航栏 */
+.chat-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20rpx;
+  height: 88rpx;
+  background-color: #ededed;
+  border-bottom: 1rpx solid #d9d9d9;
+  flex-shrink: 0;
+}
+
+.nav-back {
+  width: 80rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.back-icon {
+  font-size: 56rpx;
+  color: #000000;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.nav-title-wrapper {
+  flex: 1;
+  text-align: center;
+}
+
+.nav-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #000000;
+}
+
+.nav-more {
+  width: 80rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.more-icon {
+  font-size: 40rpx;
+  color: #000000;
+  font-weight: 600;
+}
+
+/* 消息列表 */
+.message-list {
+  flex: 1;
+  padding: 20rpx 0;
+  overflow-y: auto;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 60rpx;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #999999;
+}
+
+/* 消息包装器 */
+.message-wrapper {
+  margin-bottom: 20rpx;
+  padding: 0 30rpx;
+}
+
+/* 时间分隔线 */
+.time-divider {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30rpx;
+}
+
+.time-text {
+  font-size: 24rpx;
+  color: #999999;
+  background-color: #d9d9d9;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+}
+
+/* 消息行 */
+.message-row {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* 左对齐消息 */
+.message-left .message-row {
+  flex-direction: row;
+}
+
+/* 右对齐消息 */
+.message-right .message-row {
+  flex-direction: row-reverse;
+}
+
+/* 消息气泡 */
+.message-bubble {
+  max-width: 520rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 12rpx;
+  position: relative;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+/* 绿色气泡 - 用户 */
+.bubble-green {
+  background-color: #95ec69;
+  border-top-right-radius: 4rpx;
+}
+
+.bubble-green .message-text {
+  color: #000000;
+}
+
+/* 白色气泡 - 对方 */
+.bubble-white {
+  background-color: #ffffff;
+  border-top-left-radius: 4rpx;
+  box-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.05);
+}
+
+.bubble-white .message-text {
+  color: #000000;
+}
+
+/* 消息文本 */
+.message-text {
+  font-size: 32rpx;
+  line-height: 1.6;
+}
+
+/* 思考内容区域 */
+.reasoning-section {
+  margin-bottom: 16rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid #e5e5e5;
+}
+
+.reasoning-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+
+.reasoning-label {
+  font-size: 26rpx;
+  color: #999999;
+  font-weight: 500;
+}
+
+.reasoning-toggle {
+  font-size: 24rpx;
+  color: #576b95;
+}
+
+.reasoning-content {
+  padding: 16rpx;
+  background-color: #f7f7f7;
+  border-radius: 8rpx;
+  margin-top: 8rpx;
+}
+
+.reasoning-text {
+  font-size: 28rpx;
+  color: #666666;
+  line-height: 1.5;
+}
+
+/* 流式思考区域 */
+.reasoning-section-streaming {
+  margin-bottom: 16rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid #e5e5e5;
+}
+
+.reasoning-header-inline {
+  margin-bottom: 12rpx;
+}
+
+.reasoning-label-inline {
+  font-size: 26rpx;
+  color: #999999;
+  font-weight: 500;
+}
+
+.reasoning-text-streaming {
+  font-size: 30rpx;
+  color: #666666;
+  line-height: 1.5;
+}
+
+/* Tool 区域 */
+.tool-section {
+  margin-bottom: 16rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid #e5e5e5;
+}
+
+.tool-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+
+.tool-label {
+  font-size: 26rpx;
+  color: #07c160;
+  font-weight: 500;
+}
+
+.tool-toggle {
+  font-size: 24rpx;
+  color: #576b95;
+}
+
+.tool-content {
+  padding: 16rpx;
+  background-color: #f7f7f7;
+  border-radius: 8rpx;
+  margin-top: 8rpx;
+}
+
+.tool-running {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.tool-status {
+  font-size: 26rpx;
+  color: #999999;
+  font-style: italic;
+}
+
+.tool-result {
+  max-height: 300rpx;
+  overflow-y: auto;
+}
+
+.tool-output {
+  font-size: 26rpx;
+  color: #333333;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* 正在思考中指示器 */
+.thinking-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 10rpx 16rpx;
+}
+
+.thinking-text {
+  font-size: 30rpx;
+  color: #999999;
+}
+
+.thinking-dots {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.thinking-dots .dot {
+  width: 12rpx;
+  height: 12rpx;
+  background-color: #999999;
+  border-radius: 50%;
+  animation: typing 1.4s infinite ease-in-out both;
+}
+
+.thinking-dots .dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.thinking-dots .dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes typing {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 底部占位 */
+.bottom-spacer {
+  height: 40rpx;
+}
+
+/* 输入区域 */
+.input-area {
+  background-color: #f7f7f7;
+  border-top: 1rpx solid #e5e5e5;
+  padding: 20rpx 20rpx;
+  padding-bottom: calc(20rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  flex-shrink: 0;
+}
+
+.input-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  height: 80rpx;
+}
+
+.toolbar-btn {
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.toolbar-icon {
+  font-size: 44rpx;
+}
+
+/* 输入框包装 */
+.input-wrapper {
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+}
+
+.input-field {
+  width: 100%;
+  font-size: 32rpx;
+  color: #000000;
+  line-height: 1.4;
+  height: 44rpx;
+  min-height: 44rpx;
+  max-height: 120rpx;
+}
+
+/* 发送按钮 */
+.send-btn {
+  width: 100rpx;
+  height: 80rpx;
+  background-color: #07c160;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.send-btn.disabled {
+  background-color: #9ed29e;
+}
+
+.send-text {
+  font-size: 30rpx;
+  color: #ffffff;
+  font-weight: 500;
+}

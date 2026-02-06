@@ -1,0 +1,179 @@
+<!-- pages/chat/chat.wxml - 微信风格聊天界面 -->
+<view class="chat-page">
+  <!-- 导航栏 -->
+  <view class="chat-nav">
+    <view class="nav-back" bindtap="goBack">
+      <text class="back-icon">‹</text>
+    </view>
+    <view class="nav-title-wrapper">
+      <text class="nav-title">{{sessionTitle || '新会话'}}</text>
+    </view>
+    <view class="nav-more">
+      <text class="more-icon">⋯</text>
+    </view>
+  </view>
+
+  <!-- 消息列表 -->
+  <scroll-view 
+    class="message-list" 
+    scroll-y
+    scroll-top="{{scrollTop}}"
+    scroll-into-view="{{scrollToView}}"
+    scroll-with-animation="{{true}}"
+    enhanced
+    show-scrollbar="{{false}}"
+  >
+    <!-- 加载中 -->
+    <view wx:if="{{loading}}" class="loading-container">
+      <text class="loading-text">加载中...</text>
+    </view>
+
+    <!-- 消息列表 -->
+    <view 
+      class="message-wrapper {{item.role === 'user' ? 'message-right' : 'message-left'}}" 
+      wx:for="{{messages}}" 
+      wx:for-index="msgIndex"
+      wx:key="id"
+      id="msg-{{msgIndex}}"
+    >
+      <!-- 时间戳 -->
+      <view wx:if="{{item.showTime}}" class="time-divider">
+        <text class="time-text">{{item.time}}</text>
+      </view>
+
+      <!-- 消息内容 -->
+      <view class="message-row">
+        <view class="message-bubble {{item.role === 'user' ? 'bubble-green' : 'bubble-white'}}">
+          <!-- 遍历消息的 parts -->
+          <block wx:for="{{item.parts}}" wx:for-item="part" wx:for-index="partIndex" wx:key="id">
+            
+            <!-- reasoning 类型 - 可折叠 -->
+            <view wx:if="{{part.type === 'reasoning'}}" class="reasoning-section">
+              <view class="reasoning-header" bindtap="togglePartCollapsed" data-msg-index="{{msgIndex}}" data-part-index="{{partIndex}}">
+                <text class="reasoning-label">Thinking</text>
+                <text class="reasoning-toggle">{{part.collapsed ? 'Show details' : 'Hide details'}}</text>
+              </view>
+              <view wx:if="{{!part.collapsed}}" class="reasoning-content">
+                <rich-text class="reasoning-text" nodes="{{part.textHtml}}"></rich-text>
+              </view>
+            </view>
+
+            <!-- tool 类型 - 可折叠 -->
+            <view wx:if="{{part.type === 'tool'}}" class="tool-section">
+              <view class="tool-header" bindtap="togglePartCollapsed" data-msg-index="{{msgIndex}}" data-part-index="{{partIndex}}">
+                <text class="tool-label">{{part.tool}}</text>
+                <text class="tool-toggle">{{part.collapsed ? 'Show results' : 'Hide results'}}</text>
+              </view>
+              <view wx:if="{{!part.collapsed}}" class="tool-content">
+                <view wx:if="{{part.state.status === 'running'}}" class="tool-running">
+                  <text class="tool-status">Running...</text>
+                </view>
+                <view wx:if="{{part.state.status === 'completed' && part.state.output}}" class="tool-result">
+                  <text class="tool-output">{{part.state.output}}</text>
+                </view>
+              </view>
+            </view>
+
+            <!-- text 类型 - 正常显示 -->
+            <view wx:if="{{part.type === 'text'}}" class="message-text-wrapper">
+              <rich-text class="message-text" nodes="{{part.textHtml}}"></rich-text>
+            </view>
+
+          </block>
+        </view>
+      </view>
+    </view>
+
+    <!-- AI 流式消息 -->
+    <view wx:if="{{isStreaming}}" class="message-wrapper message-left" id="msg-streaming">
+      <view class="message-row">
+        <view class="message-bubble bubble-white">
+          <!-- 遍历流式 parts -->
+          <block wx:for="{{streamingParts}}" wx:for-item="part" wx:for-index="partIndex" wx:key="id">
+            
+            <!-- reasoning 类型 - 流式时可折叠 -->
+            <view wx:if="{{part.type === 'reasoning'}}" class="reasoning-section">
+              <view class="reasoning-header" bindtap="toggleStreamingPartCollapsed" data-part-index="{{partIndex}}">
+                <text class="reasoning-label">Thinking</text>
+                <text class="reasoning-toggle">{{part.collapsed ? 'Show details' : 'Hide details'}}</text>
+              </view>
+              <view wx:if="{{!part.collapsed}}" class="reasoning-content">
+                <rich-text class="reasoning-text" nodes="{{part.textHtml}}"></rich-text>
+              </view>
+            </view>
+
+            <!-- tool 类型 - 可折叠 -->
+            <view wx:if="{{part.type === 'tool'}}" class="tool-section">
+              <view class="tool-header" bindtap="toggleStreamingPartCollapsed" data-part-index="{{partIndex}}">
+                <text class="tool-label">{{part.tool}}</text>
+                <text class="tool-toggle">{{part.collapsed ? 'Show results' : 'Hide results'}}</text>
+              </view>
+              <view wx:if="{{!part.collapsed}}" class="tool-content">
+                <view wx:if="{{part.state.status === 'running'}}" class="tool-running">
+                  <text class="tool-status">Running...</text>
+                </view>
+                <view wx:if="{{part.state.status === 'completed' && part.state.output}}" class="tool-result">
+                  <text class="tool-output">{{part.state.output}}</text>
+                </view>
+              </view>
+            </view>
+
+            <!-- text 类型 - 正常显示 -->
+            <view wx:if="{{part.type === 'text'}}" class="message-text-wrapper">
+              <rich-text class="message-text" nodes="{{part.textHtml}}"></rich-text>
+            </view>
+
+          </block>
+
+          <!-- 等待中状态 -->
+          <view wx:if="{{streamingParts.length === 0}}" class="thinking-indicator">
+            <text class="thinking-text">Thinking...</text>
+            <view class="thinking-dots">
+              <view class="dot"></view>
+              <view class="dot"></view>
+              <view class="dot"></view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部占位 -->
+    <view class="bottom-spacer"></view>
+  </scroll-view>
+
+  <!-- 输入区域 -->
+  <view class="input-area">
+    <view class="input-toolbar">
+      <!-- 图片上传按钮 -->
+      <view class="toolbar-btn" bindtap="handleChooseImage">
+        <text class="toolbar-icon">📎</text>
+      </view>
+
+      <!-- 输入框 -->
+      <view class="input-wrapper">
+        <textarea
+          class="input-field"
+          placeholder=""
+          value="{{inputValue}}"
+          bindinput="onInputChange"
+          bindconfirm="handleSend"
+          confirm-type="send"
+          auto-height
+          maxlength="{{-1}}"
+          adjust-position="{{true}}"
+          show-confirm-bar="{{false}}"
+          fixed="{{true}}"
+        />
+      </view>
+
+      <!-- 发送按钮 -->
+      <view 
+        class="send-btn {{isSending || !inputValue ? 'disabled' : ''}}" 
+        bindtap="handleSend"
+      >
+        <text class="send-text">发送</text>
+      </view>
+    </view>
+  </view>
+</view>

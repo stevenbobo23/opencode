@@ -1,0 +1,67 @@
+<!-- pages/login/login.wxml - 微信风格 -->
+<view class="login-page">
+  <!-- Logo 区域 -->
+  <view class="logo-section">
+    <view class="logo-icon">
+      <text class="logo-symbol">◆</text>
+    </view>
+    <text class="logo-text">OpenCode</text>
+  </view>
+
+  <!-- 登录表单 -->
+  <view class="form-section">
+    <view class="input-group">
+      <input 
+        class="input" 
+        placeholder="服务器地址"
+        value="{{serverUrl}}"
+        bindinput="onServerUrlInput"
+        placeholder-class="input-placeholder"
+      />
+    </view>
+
+    <view class="input-group">
+      <input 
+        class="input" 
+        placeholder="用户名"
+        value="{{username}}"
+        bindinput="onUsernameInput"
+        placeholder-class="input-placeholder"
+      />
+    </view>
+
+    <view class="input-group">
+      <input 
+        class="input" 
+        placeholder="密码"
+        password="{{!showPassword}}"
+        value="{{password}}"
+        bindinput="onPasswordInput"
+        placeholder-class="input-placeholder"
+      />
+      <view class="password-toggle" bindtap="togglePassword">
+        <text class="toggle-text">{{showPassword ? '隐藏' : '显示'}}</text>
+      </view>
+    </view>
+
+    <!-- 错误提示 -->
+    <view wx:if="{{errorMessage}}" class="error-message">
+      <text class="error-text">{{errorMessage}}</text>
+    </view>
+
+    <!-- 登录按钮 -->
+    <button 
+      class="login-btn" 
+      bindtap="handleLogin"
+      loading="{{loading}}"
+      disabled="{{loading}}"
+    >
+      {{loading ? '登录中...' : '登录'}}
+    </button>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="footer-tips">
+    <text class="tips-text">连接您的 OpenCode 服务器</text>
+  </view>
+</view>

@@ -1,0 +1,83 @@
+/* styles/variables.wxss - 微信风格 */
+
+page {
+  /* 页面背景 */
+  --bg-page: #ededed;
+  --bg-white: #ffffff;
+  --bg-gray: #f5f5f5;
+  
+  /* 微信品牌色 */
+  --wechat-green: #07c160;
+  --wechat-green-light: #95ec69;
+  --wechat-green-dark: #06ad56;
+  
+  /* 气泡颜色 */
+  --bubble-user: #95ec69;
+  --bubble-other: #ffffff;
+  
+  /* 文字颜色 */
+  --text-primary: #000000;
+  --text-secondary: #999999;
+  --text-tertiary: #b2b2b2;
+  --text-link: #576b95;
+  
+  /* 边框和分割线 */
+  --border-light: #e5e5e5;
+  --border-medium: #d9d9d9;
+  
+  /* 背景色 */
+  --surface-white: #ffffff;
+  --surface-gray: #f7f7f7;
+  --surface-pressed: #e6e6e6;
+  
+  /* 尺寸 - 微信风格 */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-xxl: 24px;
+  
+  /* 圆角 */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-bubble: 4px;
+  
+  /* 字号 - 微信风格 */
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-lg: 17px;
+  --text-xl: 20px;
+  
+  /* 阴影 */
+  --shadow-bubble: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+  
+  /* 过渡 */
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+}
+
+/* 深色模式支持（可选） */
+.dark-mode {
+  --bg-page: #111111;
+  --bg-white: #1e1e1e;
+  --bg-gray: #2c2c2c;
+  
+  --bubble-user: #7bb32e;
+  --bubble-other: #2c2c2c;
+  
+  --text-primary: #ffffff;
+  --text-secondary: #999999;
+  --text-tertiary: #666666;
+  
+  --border-light: #3a3a3a;
+  --border-medium: #4a4a4a;
+  
+  --surface-white: #1e1e1e;
+  --surface-gray: #2c2c2c;
+  --surface-pressed: #3a3a3a;
+}

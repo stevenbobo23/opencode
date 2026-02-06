@@ -1,0 +1,14 @@
+# miniprogram
+.DS_Store
+node_modules/
+miniprogram_npm/
+
+# 微信开发者工具
+.project.config.json.local
+.project.private.config.json
+miniprogram-sitemap.json
+
+# 临时文件
+*.log
+*.tmp
+.temp/
