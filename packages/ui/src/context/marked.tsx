@@ -433,6 +433,7 @@ async function highlightCodeBlocks(html: string): Promise<string> {
   let result = html
   for (const match of matches) {
     const [fullMatch, lang, escapedCode] = match
+    if (lang === "mermaid") continue
     const code = escapedCode
       .replace(/&lt;/g, "<")
       .replace(/&gt;/g, ">")
@@ -479,6 +480,8 @@ export const { use: useMarked, provider: MarkedProvider } = createSimpleContext(
       }),
       markedShiki({
         async highlight(code, lang) {
+          if (lang === "mermaid")
+            return `<pre class="shiki" data-language="mermaid"><code class="language-mermaid">${code.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</code></pre>`
           const highlighter = await getSharedHighlighter({ themes: ["OpenCode"], langs: [] })
           if (!(lang in bundledLanguages)) {
             lang = "text"

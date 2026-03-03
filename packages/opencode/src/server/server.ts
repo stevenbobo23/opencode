@@ -1,3 +1,4 @@
+import path from "node:path"
 import { BusEvent } from "@/bus/bus-event"
 import { Bus } from "@/bus"
 import { Log } from "../util/log"
@@ -541,9 +542,36 @@ export namespace Server {
           },
         )
         .all("/*", async (c) => {
-          const path = c.req.path
+          const reqPath = c.req.path
 
-          const response = await proxy(`https://app.opencode.ai${path}`, {
+          // Serve local dist if available, otherwise proxy to app.opencode.ai
+          const distDir = path.resolve(import.meta.dirname, "../../../app/dist")
+          const filePath = path.join(distDir, reqPath === "/" ? "index.html" : reqPath)
+          const file = Bun.file(filePath)
+          if (await file.exists()) {
+            return new Response(file, {
+              headers: {
+                "Content-Type": file.type || "application/octet-stream",
+                "Content-Security-Policy":
+                  "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; media-src 'self' data:; connect-src 'self' data:",
+              },
+            })
+          }
+
+          // SPA fallback: serve index.html for non-file paths
+          const indexFile = Bun.file(path.join(distDir, "index.html"))
+          if (await indexFile.exists()) {
+            return new Response(indexFile, {
+              headers: {
+                "Content-Type": "text/html",
+                "Content-Security-Policy":
+                  "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; media-src 'self' data:; connect-src 'self' data:",
+              },
+            })
+          }
+
+          // Fallback: proxy to remote
+          const response = await proxy(`https://app.opencode.ai${reqPath}`, {
             ...c.req,
             headers: {
               ...c.req.raw.headers,

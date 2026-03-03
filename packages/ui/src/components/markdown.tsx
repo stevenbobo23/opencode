@@ -6,6 +6,24 @@ import { checksum } from "@opencode-ai/util/encode"
 import { ComponentProps, createEffect, createResource, createSignal, onCleanup, splitProps } from "solid-js"
 import { isServer } from "solid-js/web"
 
+let mermaidReady: Promise<typeof import("mermaid")> | undefined
+let mermaidCounter = 0
+
+function getMermaid() {
+  if (!mermaidReady) {
+    mermaidReady = import("mermaid").then((m) => {
+      m.default.initialize({
+        startOnLoad: false,
+        theme: "dark",
+        securityLevel: "loose",
+        fontFamily: "var(--font-family-sans)",
+      })
+      return m
+    })
+  }
+  return mermaidReady
+}
+
 type Entry = {
   hash: string
   html: string
@@ -29,6 +47,7 @@ if (typeof window !== "undefined" && DOMPurify.isSupported) {
 
 const config = {
   USE_PROFILES: { html: true, mathMl: true },
+  ADD_ATTR: ["target"],
   SANITIZE_NAMED_PROPS: true,
   FORBID_TAGS: ["style"],
   FORBID_CONTENTS: ["style", "script"],
@@ -49,6 +68,7 @@ type CopyLabels = {
   copied: string
 }
 
+const imageExtPattern = /\.(?:png|jpe?g|gif|webp|svg|bmp|ico|avif)(?:[?#].*)?$/i
 const urlPattern = /^https?:\/\/[^\s<>()`"']+$/
 
 function codeUrl(text: string) {
@@ -159,6 +179,284 @@ function markCodeLinks(root: HTMLDivElement) {
   }
 }
 
+function isImageUrl(href: string) {
+  try {
+    const url = new URL(href)
+    return imageExtPattern.test(url.pathname)
+  } catch {
+    return imageExtPattern.test(href)
+  }
+}
+
+function setupImagePreview(root: HTMLDivElement) {
+  let preview: HTMLDivElement | null = null
+  let img: HTMLImageElement | null = null
+  let current: HTMLAnchorElement | null = null
+  let hideTimeout: ReturnType<typeof setTimeout> | undefined
+
+  function show(anchor: HTMLAnchorElement) {
+    if (current === anchor) return
+    current = anchor
+
+    if (!preview) {
+      preview = document.createElement("div")
+      preview.setAttribute("data-slot", "image-preview")
+      img = document.createElement("img")
+      img.style.cursor = "pointer"
+      img.addEventListener("click", () => {
+        if (img?.src) window.open(img.src, "_blank", "noopener,noreferrer")
+      })
+      preview.appendChild(img)
+      document.body.appendChild(preview)
+
+      preview.addEventListener("mouseenter", () => {
+        if (hideTimeout) clearTimeout(hideTimeout)
+      })
+      preview.addEventListener("mouseleave", () => {
+        hide()
+      })
+    }
+
+    if (img) {
+      img.src = anchor.href
+      img.alt = anchor.textContent ?? ""
+    }
+    preview.style.display = "block"
+    position(anchor)
+  }
+
+  function position(anchor: HTMLAnchorElement) {
+    if (!preview) return
+    const rect = anchor.getBoundingClientRect()
+    const previewWidth = 320
+    const previewMaxHeight = 240
+    const gap = 8
+
+    let top = rect.top - previewMaxHeight - gap
+    if (top < 8) top = rect.bottom + gap
+
+    let left = rect.left + rect.width / 2 - previewWidth / 2
+    if (left < 8) left = 8
+    if (left + previewWidth > window.innerWidth - 8) left = window.innerWidth - previewWidth - 8
+
+    preview.style.top = `${top}px`
+    preview.style.left = `${left}px`
+  }
+
+  function hide() {
+    if (hideTimeout) clearTimeout(hideTimeout)
+    hideTimeout = undefined
+    current = null
+    if (preview) preview.style.display = "none"
+  }
+
+  function handleMouseEnter(event: MouseEvent) {
+    const target = event.target
+    console.log(
+      "[image-preview] mouseenter target:",
+      target,
+      "tagName:",
+      target instanceof Element ? target.tagName : "N/A",
+    )
+    if (!(target instanceof Element)) return
+    const anchor = target.closest("a.external-link")
+    console.log(
+      "[image-preview] closest anchor:",
+      anchor,
+      "href:",
+      anchor instanceof HTMLAnchorElement ? anchor.href : "N/A",
+    )
+    if (!(anchor instanceof HTMLAnchorElement)) return
+    const isImg = isImageUrl(anchor.href)
+    console.log("[image-preview] isImageUrl:", isImg, "href:", anchor.href)
+    if (!isImg) return
+    if (hideTimeout) clearTimeout(hideTimeout)
+    show(anchor)
+  }
+
+  function handleMouseLeave(event: MouseEvent) {
+    const target = event.target
+    if (!(target instanceof Element)) return
+    const anchor = target.closest("a.external-link")
+    if (!(anchor instanceof HTMLAnchorElement)) return
+    if (!isImageUrl(anchor.href)) return
+    hideTimeout = setTimeout(hide, 150)
+  }
+
+  console.log(
+    "[image-preview] setupImagePreview called on root:",
+    root,
+    "links found:",
+    root.querySelectorAll("a.external-link").length,
+  )
+  root.addEventListener("mouseenter", handleMouseEnter, true)
+  root.addEventListener("mouseleave", handleMouseLeave, true)
+
+  return () => {
+    root.removeEventListener("mouseenter", handleMouseEnter, true)
+    root.removeEventListener("mouseleave", handleMouseLeave, true)
+    if (hideTimeout) clearTimeout(hideTimeout)
+    if (preview) {
+      preview.remove()
+      preview = null
+      img = null
+    }
+    current = null
+  }
+}
+
+function isMermaidBlock(pre: HTMLPreElement) {
+  const code = pre.querySelector("code")
+  if (!code) return false
+  if (code.className.includes("language-mermaid")) return true
+  return false
+}
+
+function getMermaidSource(pre: HTMLPreElement) {
+  const code = pre.querySelector("code")
+  return code?.textContent?.trim() ?? ""
+}
+
+function setupMermaidButtons(root: HTMLDivElement) {
+  const pres = Array.from(root.querySelectorAll("pre")).filter(isMermaidBlock)
+  for (const pre of pres) {
+    const wrapper = pre.closest('[data-component="markdown-code"]') ?? pre.parentElement
+    if (!wrapper) continue
+    if (wrapper.hasAttribute("data-mermaid")) continue
+
+    wrapper.setAttribute("data-mermaid", "ready")
+    wrapper.setAttribute("data-mermaid-view", "code")
+
+    // toolbar
+    const toolbar = document.createElement("div")
+    toolbar.setAttribute("data-slot", "mermaid-toolbar")
+
+    // segmented toggle
+    const seg = document.createElement("div")
+    seg.setAttribute("data-slot", "mermaid-seg")
+
+    const btnCode = document.createElement("button")
+    btnCode.type = "button"
+    btnCode.textContent = "\u4ee3\u7801"
+    btnCode.setAttribute("data-active", "")
+
+    const btnDiagram = document.createElement("button")
+    btnDiagram.type = "button"
+    btnDiagram.textContent = "\u9884\u89c8\u56fe"
+
+    seg.appendChild(btnCode)
+    seg.appendChild(btnDiagram)
+
+    // zoom controls (hidden until diagram view)
+    const zoom = document.createElement("div")
+    zoom.setAttribute("data-slot", "mermaid-zoom")
+
+    let scale = 1
+    let svg: SVGSVGElement | null = null
+    let loading = false
+
+    function apply() {
+      if (!svg) return
+      svg.style.transform = `scale(${scale})`
+    }
+
+    const minus = document.createElement("button")
+    minus.type = "button"
+    minus.textContent = "\u2212"
+    minus.addEventListener("click", () => {
+      scale = Math.max(0.25, scale - 0.15)
+      apply()
+    })
+
+    const reset = document.createElement("button")
+    reset.type = "button"
+    reset.textContent = "1:1"
+    reset.addEventListener("click", () => {
+      scale = 1
+      apply()
+    })
+
+    const plus = document.createElement("button")
+    plus.type = "button"
+    plus.textContent = "+"
+    plus.addEventListener("click", () => {
+      scale = Math.min(3, scale + 0.15)
+      apply()
+    })
+
+    zoom.appendChild(minus)
+    zoom.appendChild(reset)
+    zoom.appendChild(plus)
+
+    toolbar.appendChild(seg)
+    toolbar.appendChild(zoom)
+    wrapper.insertBefore(toolbar, wrapper.firstChild)
+
+    function setView(view: "code" | "diagram") {
+      wrapper!.setAttribute("data-mermaid-view", view)
+      if (view === "code") {
+        btnCode.setAttribute("data-active", "")
+        btnDiagram.removeAttribute("data-active")
+      } else {
+        btnDiagram.setAttribute("data-active", "")
+        btnCode.removeAttribute("data-active")
+      }
+    }
+
+    btnCode.addEventListener("click", () => {
+      if (loading) return
+      setView("code")
+    })
+
+    btnDiagram.addEventListener("click", async () => {
+      if (loading) return
+      let diagram = wrapper.querySelector('[data-slot="mermaid-diagram"]') as HTMLDivElement | null
+      if (!diagram) {
+        const source = getMermaidSource(pre)
+        if (!source) return
+        loading = true
+        btnDiagram.textContent = "\u52a0\u8f7d\u4e2d..."
+        try {
+          const mermaid = await getMermaid()
+          const id = `mermaid-${++mermaidCounter}`
+          const result = await mermaid.default.render(id, source)
+          diagram = document.createElement("div")
+          diagram.setAttribute("data-slot", "mermaid-diagram")
+          diagram.innerHTML = result.svg
+          svg = diagram.querySelector("svg")
+          if (svg) {
+            svg.style.transformOrigin = "center top"
+            svg.style.transition = "transform 0.15s ease"
+          }
+          wrapper.insertBefore(diagram, pre)
+        } catch {
+          btnDiagram.textContent = "\u9884\u89c8\u56fe"
+          loading = false
+          return
+        }
+        btnDiagram.textContent = "\u9884\u89c8\u56fe"
+        loading = false
+      }
+
+      setView("diagram")
+    })
+
+    // Ctrl/Cmd + wheel zoom
+    ;(wrapper as HTMLElement).addEventListener(
+      "wheel",
+      (e: WheelEvent) => {
+        if (wrapper.getAttribute("data-mermaid-view") !== "diagram") return
+        if (!e.ctrlKey && !e.metaKey) return
+        e.preventDefault()
+        const delta = e.deltaY > 0 ? -0.1 : 0.1
+        scale = Math.max(0.25, Math.min(3, scale + delta))
+        apply()
+      },
+      { passive: false },
+    )
+  }
+}
+
 function decorate(root: HTMLDivElement, labels: CopyLabels) {
   const blocks = Array.from(root.querySelectorAll("pre"))
   for (const block of blocks) {
@@ -260,6 +558,8 @@ export function Markdown(
 
   let copySetupTimer: ReturnType<typeof setTimeout> | undefined
   let copyCleanup: (() => void) | undefined
+  let imagePreviewCleanup: (() => void) | undefined
+  let mermaidTimer: ReturnType<typeof setTimeout> | undefined
 
   createEffect(() => {
     const container = root()
@@ -282,6 +582,7 @@ export function Markdown(
     morphdom(container, temp, {
       childrenOnly: true,
       onBeforeElUpdated: (fromEl, toEl) => {
+        if (fromEl instanceof HTMLElement && fromEl.hasAttribute("data-mermaid")) return false
         if (fromEl.isEqualNode(toEl)) return false
         return true
       },
@@ -295,11 +596,20 @@ export function Markdown(
         copied: i18n.t("ui.message.copied"),
       })
     }, 150)
+
+    if (mermaidTimer) clearTimeout(mermaidTimer)
+    mermaidTimer = setTimeout(() => setupMermaidButtons(container), 800)
+
+    if (!imagePreviewCleanup) {
+      imagePreviewCleanup = setupImagePreview(container)
+    }
   })
 
   onCleanup(() => {
     if (copySetupTimer) clearTimeout(copySetupTimer)
     if (copyCleanup) copyCleanup()
+    if (mermaidTimer) clearTimeout(mermaidTimer)
+    if (imagePreviewCleanup) imagePreviewCleanup()
   })
 
   return (
