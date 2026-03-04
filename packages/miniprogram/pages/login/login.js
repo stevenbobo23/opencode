@@ -15,7 +15,7 @@ Page({
 
   onLoad() {
     // 加载已保存的服务器地址
-    const savedUrl = Storage.get(StorageKeys.SERVER_URL, "http://192.168.101.86:6015")
+    const savedUrl = Storage.get(StorageKeys.SERVER_URL, "http://localhost:4096")
     this.setData({ serverUrl: savedUrl })
 
     // 检查是否已登录

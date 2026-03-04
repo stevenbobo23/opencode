@@ -1,11 +1,15 @@
+/* pages/index/index.wxss - 专业深色风格 */
 
-/* pages/index/index.wxss - 微信风格 */
+page {
+  background-color: #0d0d0d;
+  color: #ffffff;
+}
 
 .index-page {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #ededed;
+  background-color: #0d0d0d;
 }
 
 /* 导航栏 */
@@ -13,110 +17,329 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 30rpx;
-  height: 88rpx;
-  background-color: #ededed;
-  border-bottom: 1rpx solid #d9d9d9;
+  padding: 0 24rpx;
+  height: 96rpx;
+  background: linear-gradient(180deg, #1a1a1a 0%, #141414 100%);
+  border-bottom: 1rpx solid #2a2a2a;
 }
 
 .nav-title {
-  font-size: 34rpx;
-  font-weight: 600;
-  color: #000000;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 1rpx;
 }
 
 .nav-actions {
   display: flex;
-  gap: 30rpx;
+  gap: 16rpx;
 }
 
 .nav-btn {
-  width: 60rpx;
-  height: 60rpx;
+  width: 72rpx;
+  height: 72rpx;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 16rpx;
+  background-color: #252525;
+  transition: all 0.2s;
+}
+
+.nav-btn:active {
+  background-color: #333333;
+  transform: scale(0.95);
+}
+
+.nav-btn.primary {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.nav-btn.primary:active {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
 }
 
 .nav-icon {
-  font-size: 36rpx;
+  font-size: 32rpx;
+}
+
+.nav-icon.search {
+  font-size: 28rpx;
+}
+
+/* 项目选择器区域 */
+.project-section {
+  background: linear-gradient(180deg, #141414 0%, #0d0d0d 100%);
+  padding: 24rpx;
+  border-bottom: 1rpx solid #1f1f1f;
+}
+
+.project-header {
+  margin-bottom: 16rpx;
+}
+
+.section-title {
+  font-size: 24rpx;
+  color: #888888;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2rpx;
+}
+
+.project-card {
+  background: linear-gradient(145deg, #1a1a1a 0%, #151515 100%);
+  border-radius: 20rpx;
+  border: 1rpx solid #2a2a2a;
+  overflow: hidden;
+}
+
+.project-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+  border-bottom: 1rpx solid #252525;
+}
+
+.project-selector:active {
+  background-color: #1f1f1f;
+}
+
+.project-info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.project-icon {
+  width: 80rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.icon-text {
+  font-size: 40rpx;
+}
+
+.project-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.project-name {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #ffffff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-path {
+  display: block;
+  font-size: 24rpx;
+  color: #666666;
+  margin-top: 4rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selector-action {
+  display: flex;
+  align-items: center;
+  margin-left: 16rpx;
+  flex-shrink: 0;
+}
+
+.action-text {
+  font-size: 26rpx;
+  color: #10b981;
+  margin-right: 8rpx;
+}
+
+.arrow {
+  font-size: 32rpx;
+  color: #10b981;
+  font-weight: 300;
+}
+
+/* 新建会话按钮 */
+.new-session-btn {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+  transition: all 0.2s;
+}
+
+.new-session-btn:active {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%);
+}
+
+.btn-icon {
+  font-size: 32rpx;
+  margin-right: 16rpx;
+}
+
+.btn-text {
+  flex: 1;
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #10b981;
+}
+
+.btn-arrow {
+  font-size: 32rpx;
+  color: #10b981;
 }
 
 /* 搜索栏 */
 .search-bar {
   display: flex;
   align-items: center;
-  padding: 20rpx 30rpx;
-  background-color: #ededed;
-  border-bottom: 1rpx solid #e5e5e5;
+  padding: 20rpx 24rpx;
+  background-color: #141414;
+  border-bottom: 1rpx solid #1f1f1f;
 }
 
 .search-input-wrapper {
   flex: 1;
   display: flex;
   align-items: center;
-  background-color: #ffffff;
-  border-radius: 8rpx;
+  background-color: #1f1f1f;
+  border-radius: 16rpx;
   padding: 0 20rpx;
-  height: 72rpx;
+  height: 80rpx;
+  border: 1rpx solid #2a2a2a;
 }
 
 .search-icon {
   font-size: 28rpx;
   margin-right: 16rpx;
-  color: #b2b2b2;
+  color: #666666;
 }
 
 .search-input {
   flex: 1;
-  font-size: 28rpx;
-  color: #000000;
+  font-size: 30rpx;
+  color: #ffffff;
+  height: 100%;
+}
+
+.search-input::placeholder {
+  color: #555555;
+}
+
+.clear-btn {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #333333;
+  border-radius: 50%;
+}
+
+.clear-icon {
+  font-size: 24rpx;
+  color: #888888;
 }
 
 .search-cancel {
-  margin-left: 30rpx;
+  margin-left: 24rpx;
   font-size: 30rpx;
-  color: #576b95;
+  color: #10b981;
+  font-weight: 500;
+}
+
+/* 列表标题 */
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+  background-color: #0d0d0d;
+}
+
+.list-title {
+  font-size: 24rpx;
+  color: #888888;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2rpx;
+}
+
+.list-count {
+  font-size: 24rpx;
+  color: #666666;
 }
 
 /* 会话列表 */
 .session-list {
   flex: 1;
-  background-color: #ffffff;
+  background-color: #0d0d0d;
 }
 
 .loading-state {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60rpx;
+  padding: 120rpx;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid #2a2a2a;
+  border-top-color: #10b981;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 24rpx;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-text {
   font-size: 28rpx;
-  color: #999999;
+  color: #666666;
 }
 
 /* 会话项 */
 .session-item {
   display: flex;
   align-items: center;
-  padding: 24rpx 30rpx;
-  background-color: #ffffff;
-  border-bottom: 1rpx solid #e5e5e5;
-  position: relative;
+  padding: 24rpx;
+  background-color: #141414;
+  border-bottom: 1rpx solid #1f1f1f;
+  margin: 0 24rpx 16rpx;
+  border-radius: 16rpx;
+  transition: all 0.2s;
 }
 
 .session-item:active {
-  background-color: #e6e6e6;
+  background-color: #1a1a1a;
+  transform: scale(0.98);
 }
 
-/* 头像 */
 .session-avatar {
-  width: 96rpx;
-  height: 96rpx;
-  background-color: #07c160;
-  border-radius: 12rpx;
+  width: 88rpx;
+  height: 88rpx;
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  border-radius: 24rpx;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,14 +348,12 @@
 }
 
 .avatar-text {
-  font-size: 48rpx;
+  font-size: 44rpx;
 }
 
-/* 内容区 */
 .session-content {
   flex: 1;
   min-width: 0;
-  padding-right: 100rpx;
 }
 
 .session-header {
@@ -144,42 +365,83 @@
 
 .session-title {
   font-size: 32rpx;
-  color: #000000;
-  font-weight: 500;
+  color: #ffffff;
+  font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex: 1;
+  margin-right: 16rpx;
 }
 
 .session-time {
   font-size: 24rpx;
-  color: #b2b2b2;
+  color: #666666;
   flex-shrink: 0;
-  margin-left: 16rpx;
+}
+
+.session-meta {
+  margin-bottom: 12rpx;
 }
 
 .session-preview {
   font-size: 28rpx;
-  color: #999999;
+  color: #888888;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: block;
 }
 
-/* 删除按钮 */
-.delete-btn {
-  position: absolute;
-  right: 30rpx;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 16rpx 24rpx;
-  background-color: #fa5151;
+.session-preview.empty {
+  color: #555555;
+  font-style: italic;
+}
+
+.session-tags {
+  display: flex;
+  gap: 12rpx;
+}
+
+.tag {
+  font-size: 22rpx;
+  color: #10b981;
+  background-color: rgba(16, 185, 129, 0.15);
+  padding: 6rpx 16rpx;
   border-radius: 8rpx;
+  border: 1rpx solid rgba(16, 185, 129, 0.3);
 }
 
-.delete-icon {
-  font-size: 26rpx;
-  color: #ffffff;
+.session-actions {
+  margin-left: 16rpx;
+  flex-shrink: 0;
+}
+
+.action-btn {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16rpx;
+  background-color: #2a2a2a;
+  transition: all 0.2s;
+}
+
+.action-btn:active {
+  background-color: #fa5151;
+}
+
+.action-btn.delete {
+  background-color: rgba(250, 81, 81, 0.1);
+}
+
+.action-btn.delete:active {
+  background-color: #fa5151;
+}
+
+.action-icon {
+  font-size: 28rpx;
 }
 
 /* 空状态 */
@@ -188,56 +450,63 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 200rpx 60rpx;
+  padding: 160rpx 60rpx;
+}
+
+.empty-icon-wrapper {
+  width: 160rpx;
+  height: 160rpx;
+  background: linear-gradient(145deg, #1a1a1a 0%, #141414 100%);
+  border-radius: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40rpx;
+  border: 1rpx solid #2a2a2a;
 }
 
 .empty-icon {
   font-size: 80rpx;
-  margin-bottom: 30rpx;
 }
 
-.empty-text {
-  font-size: 32rpx;
-  color: #999999;
+.empty-title {
+  font-size: 36rpx;
+  color: #ffffff;
+  font-weight: 600;
   margin-bottom: 16rpx;
 }
 
-.empty-subtext {
+.empty-desc {
   font-size: 28rpx;
-  color: #576b95;
+  color: #666666;
+  text-align: center;
+  margin-bottom: 40rpx;
+  line-height: 1.6;
 }
 
-/* Tab Bar */
+.empty-action {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  padding: 24rpx 56rpx;
+  border-radius: 16rpx;
+}
+
+.empty-action:active {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: scale(0.98);
+}
+
+.empty-action .action-text {
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+/* 底部间距 */
+.bottom-spacer {
+  height: 40rpx;
+}
+
+/* Tab Bar 样式覆盖 */
 .tab-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  height: 100rpx;
-  background-color: #f7f7f7;
-  border-top: 1rpx solid #e5e5e5;
-  padding-bottom: constant(safe-area-inset-bottom);
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.tab-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  height: 100%;
-}
-
-.tab-icon {
-  font-size: 44rpx;
-  margin-bottom: 4rpx;
-}
-
-.tab-text {
-  font-size: 22rpx;
-  color: #999999;
-}
-
-.tab-item.active .tab-text {
-  color: #07c160;
+  display: none;
 }

@@ -56,7 +56,7 @@ packages/miniprogram/
 
 ### 3. 配置开发环境
 
-由于项目使用内网地址 `http://192.168.101.86:6015`，需要：
+由于项目使用内网地址 `https://opencode.mycodebro.cn`，需要：
 
 1. 在微信开发者工具中，点击右上角「详情」
 2. 在「本地设置」中，勾选「不校验合法域名、web-view（业务域名）、TLS 版本以及 HTTPS 证书」
@@ -72,7 +72,7 @@ opencode serve --port 6015
 
 ### 5. 登录小程序
 
-1. 在小程序中输入服务器地址：`http://192.168.101.86:6015`
+1. 在小程序中输入服务器地址：`https://opencode.mycodebro.cn`
 2. 输入用户名和密码（根据你的服务器配置）
 3. 点击「登录」
 
@@ -121,7 +121,7 @@ const sse = handleMessageStream(sessionId, {
 const { Storage, StorageKeys } = require("../../utils/storage")
 
 // 保存数据
-Storage.set(StorageKeys.SERVER_URL, "http://192.168.101.86:6015")
+Storage.set(StorageKeys.SERVER_URL, "http://localhost:4096")
 
 // 读取数据
 const url = Storage.get(StorageKeys.SERVER_URL)

@@ -9,7 +9,7 @@ class APIClient {
   }
 
   init() {
-    this.baseURL = Storage.get(StorageKeys.SERVER_URL, "http://192.168.101.86:6015")
+    this.baseURL = Storage.get(StorageKeys.SERVER_URL, "http://localhost:4096")
     const credentials = Storage.get(StorageKeys.CREDENTIALS, {})
     this.authHeader = credentials.token ? `Bearer ${credentials.token}` : ""
   }

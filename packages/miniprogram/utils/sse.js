@@ -151,7 +151,7 @@ function createSSE(url, options = {}) {
 // 全局事件流 - 使用 /event 端点
 function handleEventStream(options = {}) {
   const { StorageKeys, Storage } = require("./storage")
-  const serverUrl = Storage.get(StorageKeys.SERVER_URL, "http://192.168.101.86:6015")
+  const serverUrl = Storage.get(StorageKeys.SERVER_URL, "http://localhost:4096")
   const url = `${serverUrl}/event`
 
   console.log("Connecting to event stream:", url)

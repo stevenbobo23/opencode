@@ -16,7 +16,7 @@ Page({
 
   loadUserInfo() {
     const credentials = Storage.get(StorageKeys.CREDENTIALS, {})
-    const serverUrl = Storage.get(StorageKeys.SERVER_URL, "http://192.168.101.86:6015")
+    const serverUrl = Storage.get(StorageKeys.SERVER_URL, "http://localhost:4096")
 
     this.setData({
       userInfo: credentials,
